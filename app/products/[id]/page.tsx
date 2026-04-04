@@ -41,7 +41,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <section>
           <h3>Pricing</h3>
           <p>
-            {product.show_price ? `Price: $${product.base_price.toFixed(2)}` : 'Select product options to reveal pricing.'}
+            {product.show_price && product.base_price !== null
+              ? `Price: $${product.base_price.toFixed(2)}`
+              : 'Select product options to reveal pricing.'}
           </p>
         </section>
 
