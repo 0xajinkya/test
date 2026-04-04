@@ -1,7 +1,37 @@
 import { getSupabase } from '@/lib/supabase';
 import { Product, SiteConfig } from '@/lib/types';
 
+function toPublicProduct(product: Product): Product {
+  if (product.show_price) {
+    return product;
+  }
+
+  return {
+    ...product,
+    base_price: null
+  };
+}
+
 export async function getProducts(): Promise<Product[]> {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  return (data as Product[]).map(toPublicProduct);
+}
+
+export async function getAdminProducts(): Promise<Product[]> {
   const supabase = getSupabase();
   if (!supabase) {
     return [];
@@ -37,7 +67,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     return null;
   }
 
-  return data as Product;
+  return toPublicProduct(data as Product);
 }
 
 export async function getSiteConfig(): Promise<SiteConfig | null> {

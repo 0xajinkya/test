@@ -8,7 +8,7 @@ export type Product = {
   story: string;
   why_buy: string;
   image_url: string;
-  base_price: number;
+  base_price: number | null;
   show_price: boolean;
   customizable: boolean;
   created_at?: string;

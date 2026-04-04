@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 import { createProduct, loginAdmin, logoutAdmin, updateConfig } from './actions';
-import { getProducts, getSiteConfig } from '@/lib/data';
+import { getAdminProducts, getSiteConfig } from '@/lib/data';
 
 const ADMIN_COOKIE = 'murtikar-admin-auth';
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
   const isAuthed = cookieStore.get(ADMIN_COOKIE)?.value === 'ok';
-  const [products, config] = isAuthed ? await Promise.all([getProducts(), getSiteConfig()]) : [[], null];
+  const [products, config] = isAuthed ? await Promise.all([getAdminProducts(), getSiteConfig()]) : [[], null];
 
   if (!isAuthed) {
     return (
